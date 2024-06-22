@@ -21,15 +21,15 @@ class User < ApplicationRecord
   
   ## Direct associations
 
-  # User#comments: returns rows from the comments table associated to this user by the author_id column
+        # User#comments: returns rows from the comments table associated to this user by the author_id column
 
-  # User#own_photos: returns rows from the photos table  associated to this user by the owner_id column
+        # User#own_photos: returns rows from the photos table  associated to this  user by the owner_id column
 
-  # User#likes: returns rows from the likes table associated to this user by the fan_id column
+        # User#likes: returns rows from the likes table associated to this user by the fan_id column
 
-  # User#sent_follow_requests: returns rows from the follow requests table associated to this user by the sender_id column
+        # User#sent_follow_requests: returns rows from the follow requests table associated to this user by the sender_id column
 
-  # User#received_follow_requests: returns rows from the follow requests table associated to this user by the recipient_id column
+       # User#received_follow_requests: returns rows from the follow requests table associated to this user by the recipient_id column
 
 
   ### Scoped direct associations
@@ -56,39 +56,47 @@ class User < ApplicationRecord
 
   # User#discover: returns rows from the photos table associated to this user through its leaders (the leaders' liked_photos)
 
-  def comments
-    my_id = self.id
+        # def comments
+        #   my_id = self.id
 
-    matching_comments = Comment.where({ :author_id => my_id })
+        #   matching_comments = Comment.where({ :author_id => my_id })
 
-    return matching_comments
-  end
+        #   return matching_comments
+        # end
 
-  def own_photos
-    my_id = self.id
+  has_many(:comments, foreign_key: "author_id")
+  
+      # def own_photos
+      #   my_id = self.id
 
-    matching_photos = Photo.where({ :owner_id => my_id })
+      #   matching_photos = Photo.where({ :owner_id => my_id })
 
-    return matching_photos
-  end
+      #   return matching_photos
+      # end
 
-  def likes
-    my_id = self.id
+  has_many(:own_photos, class_name: "Photo", foreign_key: "owner_id")    
+     
+      # def likes
+      #   my_id = self.id
 
-    matching_likes = Like.where({ :fan_id => my_id })
+      #   matching_likes = Like.where({ :fan_id => my_id })
 
-    return matching_likes
-  end
+      #   return matching_likes
+      # end
 
-  def liked_photos
-    my_likes = self.likes
-    
-    array_of_photo_ids = Array.new
+  has_many(:likes, foreign_key: "fan_id")
 
-    my_likes.each do |a_like|
-      array_of_photo_ids.push(a_like.photo_id)
-    end
+      # def liked_photos
+      #   my_likes = self.likes
+        
+      #   array_of_photo_ids = Array.new
 
+      #   my_likes.each do |a_like|
+      #     array_of_photo_ids.push(a_like.photo_id)
+      #   end
+
+  
+      
     matching_photos = Photo.where({ :id => array_of_photo_ids })
 
     return matching_photos
@@ -110,21 +118,25 @@ class User < ApplicationRecord
     return unique_matching_photos
   end
 
-  def sent_follow_requests
-    my_id = self.id
+        # def sent_follow_requests
+        #   my_id = self.id
 
-    matching_follow_requests = FollowRequest.where({ :sender_id => my_id })
+        #   matching_follow_requests = FollowRequest.where({ :sender_id => my_id })
 
-    return matching_follow_requests
-  end
+        #   return matching_follow_requests
+        # end
 
-  def received_follow_requests
-    my_id = self.id
+    has_many(:sent_follow_requests, class_name: "FollowRequest", foreign_key: "sender_id")
 
-    matching_follow_requests = FollowRequest.where({ :recipient_id => my_id })
+        # def received_follow_requests
+        #   my_id = self.id
 
-    return matching_follow_requests
-  end
+        #   matching_follow_requests = FollowRequest.where({ :recipient_id => my_id })
+
+        #   return matching_follow_requests
+        # end
+
+    has_many(:recieved_follow_requests, class_name: "FollowRequest", foreign_key: "recipient_id")
 
   def accepted_sent_follow_requests
     my_sent_follow_requests = self.sent_follow_requests

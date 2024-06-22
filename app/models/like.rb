@@ -20,27 +20,32 @@ class Like < ApplicationRecord
   
   ## Direct associations
 
-  # Like#fan: returns a row from the users table associated to this like by the fan_id column
+        # Like#fan: returns a row from the users table associated to this like by the fan_id column
 
-  # Like#photo: returns a row from the photo table associated to this like by the photo_id column
+        # Like#photo: returns a row from the photo table associated to this like by the photo_id column
 
-  def fan
-    my_fan_id = self.fan_id
+        # def fan
+        #   my_fan_id = self.fan_id
 
-    matching_users = User.where({ :id => my_fan_id })
+        #   matching_users = User.where({ :id => my_fan_id })
 
-    the_user = matching_users.at(0)
+        #   the_user = matching_users.at(0)
 
-    return the_user
-  end
+        #   return the_user
+        # end
+        
+  belongs_to(:fan, class_name: "User")
 
-  def photo
-    my_photo_id = self.photo_id
+        # def photo
+        #   my_photo_id = self.photo_id
 
-    matching_photos = Photo.where({ :id => my_photo_id })
+        #   matching_photos = Photo.where({ :id => my_photo_id })
 
-    the_photo = matching_photos.at(0)
+        #   the_photo = matching_photos.at(0)
 
-    return the_photo
-  end
+        #   return the_photo
+        # end
+
+  belongs_to(:photo)
+
 end

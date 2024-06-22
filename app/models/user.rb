@@ -41,9 +41,9 @@ class User < ApplicationRecord
 
   ## Indirect associations
 
-  # User#liked_photos: returns rows from the photos table associated to this user through its likes
+        # User#liked_photos: returns rows from the photos table associated to this user through its likes
 
-  # User#commented_photos: returns rows from the photos table associated to this user through its comments
+        # User#commented_photos: returns rows from the photos table associated to this user through its comments
 
 
   ### Indirect associations built on scoped associations
@@ -94,29 +94,31 @@ class User < ApplicationRecord
       #   my_likes.each do |a_like|
       #     array_of_photo_ids.push(a_like.photo_id)
       #   end
-
-  
+      #   matching_photos = Photo.where({ :id => array_of_photo_ids })
       
-    matching_photos = Photo.where({ :id => array_of_photo_ids })
+      #   return matching_photos
+      # end
 
-    return matching_photos
-  end
+  has_many(:liked_photos, through: :likes, source: :photo )  
+      
 
-  def commented_photos
-    my_comments = self.comments
-    
-    array_of_photo_ids = Array.new
+        # def commented_photos
+        #   my_comments = self.comments
+          
+        #   array_of_photo_ids = Array.new
 
-    my_comments.each do |a_comment|
-      array_of_photo_ids.push(a_comment.photo_id)
-    end
+        #   my_comments.each do |a_comment|
+        #     array_of_photo_ids.push(a_comment.photo_id)
+        #   end
+      
+        #   matching_photos = Photo.where({ :id => array_of_photo_ids })
+      
+        #   unique_matching_photos = matching_photos.distinct
+      
+        #   return unique_matching_photos
+        # end
 
-    matching_photos = Photo.where({ :id => array_of_photo_ids })
-
-    unique_matching_photos = matching_photos.distinct
-
-    return unique_matching_photos
-  end
+  has_many(:commented_photos, through: :comments, source: :photo )
 
         # def sent_follow_requests
         #   my_id = self.id
@@ -136,7 +138,7 @@ class User < ApplicationRecord
         #   return matching_follow_requests
         # end
 
-    has_many(:recieved_follow_requests, class_name: "FollowRequest", foreign_key: "recipient_id")
+    has_many(:received_follow_requests, class_name: "FollowRequest", foreign_key: "recipient_id")
 
   def accepted_sent_follow_requests
     my_sent_follow_requests = self.sent_follow_requests

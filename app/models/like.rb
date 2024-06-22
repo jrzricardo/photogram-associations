@@ -33,8 +33,8 @@ class Like < ApplicationRecord
 
         #   return the_user
         # end
-        
-  belongs_to(:fan, class_name: "User")
+
+  belongs_to(:fan, class_name: "User", foreign_key: "fan_id")
 
         # def photo
         #   my_photo_id = self.photo_id
@@ -46,6 +46,6 @@ class Like < ApplicationRecord
         #   return the_photo
         # end
 
-  belongs_to(:photo)
+  belongs_to(:photo, class_name: "Photo", foreign_key: "photo_id")
 
 end
